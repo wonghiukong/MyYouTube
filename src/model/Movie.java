@@ -1,10 +1,11 @@
-package mycloud;
+package model;
 
 import java.sql.Date;
 
 public class Movie {
 	private String movieId;
 	private String title;
+	private String ext;
 	private Date uploadDate;
 	private int totalRating;
 	private int ratingCount;
@@ -28,6 +29,12 @@ public class Movie {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	public String getExt() {
+		return ext;
+	}
+	public void setExt(String ext) {
+		this.ext = ext;
 	}
 	public Date getUploadDate() {
 		return uploadDate;
