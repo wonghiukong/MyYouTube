@@ -9,6 +9,8 @@ public class Movie {
 	private Date uploadDate;
 	private int totalRating;
 	private int ratingCount;
+	private String url;
+	
 	public String getMovieId() {
 		return movieId;
 	}
@@ -59,5 +61,11 @@ public class Movie {
 			return 0;
 		else
 			return totalRating / ratingCount;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }
