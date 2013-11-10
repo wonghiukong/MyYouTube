@@ -17,14 +17,18 @@ public class Movie {
 	public void setMovieId(String movieId) {
 		this.movieId = movieId;
 	}
+	public Movie() {
+	}
+	
 	public Movie(String movieId, String title, Date uploadDate,
-			int totalRating, int ratingCount) {
+			int totalRating, int ratingCount, String url) {
 		super();
 		this.movieId = movieId;
 		this.title = title;
 		this.uploadDate = uploadDate;
 		this.totalRating = totalRating;
 		this.ratingCount = ratingCount;
+		this.url = url;
 	}
 	public String getTitle() {
 		return title;
