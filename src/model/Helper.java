@@ -8,7 +8,6 @@ public class Helper {
 	public static final String connectionPassword = "jiatianli";
 	public static final String s3BucketName = "MyYouTubeBucket.team9";
 	public static ArrayList<Movie> getSortedMovieList() {
-		
-		return null;
+		return new ArrayList<Movie>();
 	}
 }
