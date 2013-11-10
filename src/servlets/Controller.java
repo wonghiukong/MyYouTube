@@ -12,7 +12,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.*;
+import model.Helper;
+import model.S3StorageManager;
+import model.StorageObject;
+
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 
 /**
  * Servlet implementation class Controller
@@ -34,8 +38,16 @@ public class Controller extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		System.out.println("Hello world!");
-		S3StorageManager ssm0 = new S3StorageManager();
-		//S3StorageManager ssm1 = new S3StorageManager();
+		S3StorageManager s3SM = new S3StorageManager();
+		
+		StorageObject sObj = new StorageObject();
+		byte[] data = new byte[10];
+		data[0] = 9;
+		sObj.setBucketName("testS3SM");
+		sObj.setData(data);
+		sObj.setStoragePath("001");
+		s3SM.store(sObj, true, CannedAccessControlList.PublicRead);
+		//s3SM.delete(sObj);
 		
 		Connection conn = null;
 		Statement stmt = null;

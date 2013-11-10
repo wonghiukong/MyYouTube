@@ -54,4 +54,10 @@ public class Movie {
 	public void setRatingCount(int ratingCount) {
 		this.ratingCount = ratingCount;
 	}
+	public double getRate() {
+		if (ratingCount == 0)
+			return 0;
+		else
+			return totalRating / ratingCount;
+	}
 }

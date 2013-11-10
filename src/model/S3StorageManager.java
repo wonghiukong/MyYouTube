@@ -14,11 +14,13 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.PropertiesCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.amazonaws.services.s3.model.StorageClass;
 
 import freemarker.template.Configuration;
 
@@ -94,7 +96,7 @@ public class S3StorageManager {
 	 * @param reducedRedundancy whether or not to use reduced redundancy storage
 	 * @param acl a canned access control list indicating what permissions to store this object with (can be null to leave it set to default)
 	 */
-	public void store(StorageObject obj) {
+	public void store(StorageObject obj, boolean reducedRedundancy, CannedAccessControlList acl) {
 		// Make sure the bucket exists before we try to use it
 		checkForAndCreateBucket(obj.getBucketName());
 
@@ -105,7 +107,17 @@ public class S3StorageManager {
 		ByteArrayInputStream is = new ByteArrayInputStream(obj.getData());
 		PutObjectRequest request = new PutObjectRequest(obj.getBucketName(), obj.getStoragePath(), is, omd);
 
+		// Check if reduced redundancy is enabled
+		if (reducedRedundancy) {
+			request.setStorageClass(StorageClass.ReducedRedundancy);
+		}
+
 		s3Client.putObject(request);
+
+		// If we have an ACL set access permissions for the the data on S3
+		if (acl!=null) {
+		    s3Client.setObjectAcl(obj.getBucketName(), obj.getStoragePath(), acl);
+		}
 
 	}
 		
