@@ -25,7 +25,7 @@
 	<div align="center"><h1>My YouTube</h1></div>
 	<div id='upload_div'>
 		<h2>Upload</h2>
-		<form action="UploadServlet" method="post">
+		<form action="UploadServlet" method="post" enctype="multipart/form-data">
 			<p>
 				Please specify a video file to upload<br>
 				<input type="file" name="movie_file" size="40">
@@ -61,7 +61,7 @@
 		</tr>
 		<% ArrayList<Movie> movieList = Helper.getSortedMovieList();
 			Movie mov = new Movie();
-			mov.setMovieId("3208");
+			mov.setMovieId(3208);
 			mov.setRatingCount(10);
 			mov.setTotalRating(120);
 			mov.setTitle("Star War");

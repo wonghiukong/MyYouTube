@@ -11,7 +11,7 @@ public class StorageObject {
 	private String bucketName;
 	private byte [] data;
 	private String storagePath;
-	private String mimeType="audio/mpeg";
+	private String mimeType="video/mp4";
 
 	public void setBucketName(String bucketName) {
 		/**

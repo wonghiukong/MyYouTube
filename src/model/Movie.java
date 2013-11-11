@@ -3,32 +3,53 @@ package model;
 import java.util.Date;
 
 public class Movie implements Comparable<Movie> {
-	private String movieId;
+	private long movieId;
 	private String title;
 	private String ext;
 	private Date uploadDate;
 	private int totalRating;
 	private int ratingCount;
 	private String url;
+	private byte [] data;
 	
-	public String getMovieId() {
+	public long getMovieId() {
 		return movieId;
 	}
-	public void setMovieId(String movieId) {
+	public void setMovieId(long movieId) {
 		this.movieId = movieId;
 	}
 	public Movie() {
 	}
 	
-	public Movie(String movieId, String title, Date uploadDate,
+	public Movie(long movieId, String title, String ext, Date uploadDate,
 			int totalRating, int ratingCount, String url) {
 		super();
 		this.movieId = movieId;
 		this.title = title;
+		this.ext = ext;
 		this.uploadDate = uploadDate;
 		this.totalRating = totalRating;
 		this.ratingCount = ratingCount;
 		this.url = url;
+	}
+	
+	public Movie(long movieId, String title, String ext, Date uploadDate,
+			int totalRating, int ratingCount, String url, byte[] data) {
+		super();
+		this.movieId = movieId;
+		this.title = title;
+		this.ext = ext;
+		this.uploadDate = uploadDate;
+		this.totalRating = totalRating;
+		this.ratingCount = ratingCount;
+		this.url = url;
+		this.data = data;
+	}
+	public byte[] getData() {
+		return data;
+	}
+	public void setData(byte[] data) {
+		this.data = data;
 	}
 	public String getTitle() {
 		return title;

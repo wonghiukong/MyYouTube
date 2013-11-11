@@ -1,10 +1,14 @@
 package model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+import com.mysql.jdbc.util.ResultSetUtil;
 
 public class DBManager {
 	public DBManager() {
@@ -23,7 +27,7 @@ public class DBManager {
 			// DriverManager.getConnection("jdbc:mysql://localhost:3306/testdatabase?user=testuser&password=testpassword");			
 			conn = DriverManager.getConnection(Helper.connectionUrl, Helper.connectionUser,
 					Helper.connectionPassword);
-			stmt = conn.createStatement();
+			stmt = (Statement) conn.createStatement();
 			rs = stmt.executeQuery(sqlStmt);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -50,10 +54,14 @@ public class DBManager {
 		return rs;
 	}
 	
-	public static void update(String sqlStmt) {
+	public static long insert(Movie movie) {
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
+		String SQL_INSERT = "INSERT INTO Movie"
+			    + " (title, ext, upload_date, total_rating, rating_count) VALUES (?, ?, ?, ?, ?)";
 		ResultSet rs = null;
+		ResultSet generatedKeys = null;
+		long id = 0;
 		try {
 			// new com.mysql.jdbc.Driver();
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -61,8 +69,24 @@ public class DBManager {
 			// DriverManager.getConnection("jdbc:mysql://localhost:3306/testdatabase?user=testuser&password=testpassword");			
 			conn = DriverManager.getConnection(Helper.connectionUrl, Helper.connectionUser,
 					Helper.connectionPassword);
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sqlStmt);
+			stmt = (PreparedStatement) conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
+			stmt.setString(1, movie.getTitle());
+			stmt.setString(2, movie.getExt());
+			stmt.setDate(3, (Date) movie.getUploadDate());
+			stmt.setInt(4, movie.getTotalRating());
+			stmt.setInt(5, movie.getRatingCount());
+	        // ...
+
+	        int affectedRows = stmt.executeUpdate();
+	        if (affectedRows == 0) {
+	            throw new SQLException("Creating movie failed, no rows affected.");
+	        }
+			
+			generatedKeys = stmt.getGeneratedKeys();
+			if (generatedKeys.next())
+				id =  generatedKeys.getLong(1);
+			else
+				throw new Exception("Shit just got real");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -85,5 +109,6 @@ public class DBManager {
 				e.printStackTrace();
 			}
 		}
+		return id;
 	}
 }

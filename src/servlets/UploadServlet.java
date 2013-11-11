@@ -7,19 +7,26 @@ import java.io.InputStreamReader;
 import java.util.Date;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-
+import model.DBManager;
 import model.Helper;
+import model.Movie;
 import model.S3StorageManager;
 import model.StorageObject;
 
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+
+//http://stackoverflow.com/questions/2422468/how-to-upload-files-to-server-using-jsp-servlet
 /**
  * Servlet implementation class UploadServlet
  */
+@MultipartConfig(location="./", fileSizeThreshold=1024*1024, 
+maxFileSize=1024*1024*1024*5, maxRequestSize=1024*1024*1024*5)
 public class UploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -53,31 +60,57 @@ public class UploadServlet extends HttpServlet {
 		//int total_rating = Integer.parseInt(request.getParameter("total_rating"));
 		//int rating_count = Integer.parseInt(request.getParameter("rating_count"));
 		
-		
-		String title = request.getParameter("movie_file");
-		System.out.println(title);
-		String dataString = getRequestBodyString(request);
-		System.out.println(dataString.charAt(0));
-		byte[] data = dataString.getBytes();
-		Date upload_date = new Date();
-		String sqlStmt = "INSERT INTO Movie (title, upload_date)" 
-					   + "\n" + "VALUES (" + title + ", " + upload_date + "')";
-		S3StorageManager S3sm = new S3StorageManager();
-		StorageObject sObj = new StorageObject();
-		sObj.setBucketName(Helper.s3BucketName);
-		sObj.setData(data);
-		sObj.setStoragePath(title);
-		S3sm.store(sObj, true, CannedAccessControlList.PublicRead);
+		Movie movie = getMovie(request);
+		movie.setMovieId(insertMovieInfoToDB(movie));
+		putMovieDataIntoS3(movie);
 		response.sendRedirect("index.jsp");
 	}
 	
-	private String getRequestBodyString(HttpServletRequest request) throws IOException {
-		String body = null;
-	    StringBuilder stringBuilder = new StringBuilder();
-	    BufferedReader bufferedReader = null;
-
-	    try {
-	        InputStream inputStream = request.getInputStream();
+	private void putMovieDataIntoS3(Movie movie) {
+		S3StorageManager S3sm = new S3StorageManager();
+		StorageObject sObj = new StorageObject();
+		sObj.setBucketName(Helper.s3BucketName);
+		sObj.setData(movie.getData());
+		sObj.setStoragePath(String.valueOf(movie.getMovieId()));
+		S3sm.store(sObj, false, CannedAccessControlList.PublicRead);
+	}
+	
+	private long insertMovieInfoToDB(Movie movie) {
+		/*String sqlStmt = "INSERT INTO Movie (title) " 
+				   + "VALUES ('" + title + "')";*/
+		long id = DBManager.insert(movie);
+		return id;
+	}
+	
+	private Movie getMovie(HttpServletRequest request) throws IllegalStateException, IOException, ServletException {
+		Part filePart = request.getPart("movie_file"); // Retrieves <input type="file" name="file">
+	    String title = getFilename(filePart);
+	    System.out.println(title);
+	    InputStream filecontent = filePart.getInputStream();		
+		String dataString = convertStreamToString(filecontent);
+		byte[] data = dataString.getBytes();
+		System.out.println(dataString.length());
+		//Date upload_date = new Date();
+		Movie movie = new Movie();
+		movie.setTitle(title);
+		movie.setData(data);
+		return movie;
+	}
+	
+	private static String getFilename(Part part) {
+	    for (String cd : part.getHeader("content-disposition").split(";")) {
+	        if (cd.trim().startsWith("filename")) {
+	            String filename = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
+	            return filename.substring(filename.lastIndexOf('/') + 1).substring(filename.lastIndexOf('\\') + 1); // MSIE fix.
+	        }
+	    }
+	    return null;
+	}
+		
+	private String convertStreamToString(InputStream inputStream) throws IOException {
+		BufferedReader bufferedReader = null;
+		StringBuilder stringBuilder = new StringBuilder();
+		try {
 	        if (inputStream != null) {
 	        	System.out.println("check point");
 	            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -85,7 +118,7 @@ public class UploadServlet extends HttpServlet {
 	            int bytesRead = -1;
 	            while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
 	                stringBuilder.append(charBuffer, 0, bytesRead);
-	                System.out.println(stringBuilder.toString());
+//	                System.out.println(stringBuilder.toString());
 	            }
 	        } else {
 	            stringBuilder.append("");
@@ -101,8 +134,9 @@ public class UploadServlet extends HttpServlet {
 	            }
 	        }
 	    }
-
-	    body = stringBuilder.toString();
-	    return body;
+	    System.out.println("check point2");
+//	    System.out.println(stringBuilder.toString());
+	    String str = stringBuilder.toString();
+	    return str;
 	}
 }
