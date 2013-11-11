@@ -28,7 +28,7 @@ public class DBManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
+			/*try {
 				if (rs != null)
 					rs.close();
 			} catch (SQLException e) {
@@ -45,7 +45,7 @@ public class DBManager {
 					conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}
+			}*/
 		}
 		return rs;
 	}

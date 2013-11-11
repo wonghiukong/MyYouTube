@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Helper;
+import model.Movie;
 import model.S3StorageManager;
 import model.StorageObject;
 
@@ -59,16 +61,20 @@ public class Controller extends HttpServlet {
 			// DriverManager.getConnection("jdbc:mysql://localhost:3306/testdatabase?user=testuser&password=testpassword");			
 			conn = DriverManager.getConnection(Helper.connectionUrl, Helper.connectionUser,
 					Helper.connectionPassword);
-			stmt = conn.createStatement();
+			/*stmt = conn.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM Movie");
 			while (rs.next()) {
 				String movie_id = rs.getString("movie_id");
 				String title = rs.getString("title");
-				//String upload_date = rs.getString("upload_date");
+				Date upload_date = rs.getDate("upload_date");
 				int total_rating = rs.getInt("total_rating");
 				int rating_count = rs.getInt("rating_count");
 				System.out.println("ID: " + movie_id + ", title: " + title
-						+ ", Total_rating: " + total_rating + ", Rating_count: " + rating_count);
+						+ ", Upload_date: " + upload_date + ", Total_rating: " + total_rating + ", Rating_count: " + rating_count);
+			}*/
+			ArrayList<Movie> movies = Helper.getSortedMovieList();
+			for (Movie movie : movies) {
+				System.out.println(movie.toString());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

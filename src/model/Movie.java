@@ -1,8 +1,8 @@
 package model;
 
-import java.sql.Date;
+import java.util.Date;
 
-public class Movie {
+public class Movie implements Comparable<Movie> {
 	private String movieId;
 	private String title;
 	private String ext;
@@ -60,11 +60,11 @@ public class Movie {
 	public void setRatingCount(int ratingCount) {
 		this.ratingCount = ratingCount;
 	}
-	public double getRate() {
+	public double getRating() {
 		if (ratingCount == 0)
 			return 0;
 		else
-			return totalRating / ratingCount;
+			return (double)totalRating / ratingCount;
 	}
 	public String getUrl() {
 		return url;
@@ -72,4 +72,25 @@ public class Movie {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	/*
+    **  Implement the natural order for this class
+    */
+    public int compareTo(Movie rhs)
+    {
+    	if (getRating() < rhs.getRating())
+    		return -1;
+    	if (getRating() > rhs.getRating())
+    		return 1;
+    	return 0;
+    }
+    public String toString() {
+    	String info = "ID: " + movieId 
+    				+ ", title: " + title
+					+ ", Upload_date: " + uploadDate 
+					+ ", Total_rating: " + totalRating
+					+ ", Rating_count: " + ratingCount
+					+ ", Rating: " + getRating()
+					+ ", url: " + url;
+    	return info;
+    }
 }
