@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ page import="java.util.*"%>
 <%@ page import="model.*"%>
-<%@ page import="java.sql.Date" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -66,8 +65,9 @@
 			mov.setRatingCount(10);
 			mov.setTotalRating(120);
 			mov.setTitle("Star War");
-			mov.setUploadDate(new Date(29));
+			mov.setUploadDate(new Date());
 			mov.setUrl("www.java.com");
+			movieList.add(mov);
 			for(Movie movie: movieList){
 		%>
 		<tr>
