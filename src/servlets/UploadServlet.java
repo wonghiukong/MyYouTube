@@ -1,10 +1,11 @@
 package servlets;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -25,8 +26,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 /**
  * Servlet implementation class UploadServlet
  */
-@MultipartConfig(location="./", fileSizeThreshold=1024*1024, 
-maxFileSize=1024*1024*1024*5, maxRequestSize=1024*1024*1024*5)
+@MultipartConfig(location = "", fileSizeThreshold = 1024*1024, 
+					maxFileSize = 1024*1024*1024*5, maxRequestSize = 1024*1024*1024*5)
 public class UploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -87,9 +88,11 @@ public class UploadServlet extends HttpServlet {
 	    String title = getFilename(filePart);
 	    System.out.println(title);
 	    InputStream filecontent = filePart.getInputStream();		
-		String dataString = convertStreamToString(filecontent);
-		byte[] data = dataString.getBytes();
-		System.out.println(dataString.length());
+//		String dataString = convertStreamToString(filecontent);
+//		System.out.println("dataString size: " + dataString.length());
+//		byte[] data = dataString.getBytes();
+	    byte[] data = convertStreamToByteArray(filecontent);
+		//System.out.println(dataString.length());
 		//Date upload_date = new Date();
 		Movie movie = new Movie();
 		movie.setTitle(title);
@@ -106,7 +109,26 @@ public class UploadServlet extends HttpServlet {
 	    }
 	    return null;
 	}
-		
+	
+	private byte[] convertStreamToByteArray(InputStream is) throws IOException {
+		int len;
+	    int size = 1024;
+	    byte[] buf;
+
+	    if (is instanceof ByteArrayInputStream) {
+	      size = is.available();
+	      buf = new byte[size];
+	      len = is.read(buf, 0, size);
+	    } else {
+	      ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	      buf = new byte[size];
+	      while ((len = is.read(buf, 0, size)) != -1)
+	        bos.write(buf, 0, len);
+	      buf = bos.toByteArray();
+	    }
+	    return buf;
+	}
+	
 	private String convertStreamToString(InputStream inputStream) throws IOException {
 		BufferedReader bufferedReader = null;
 		StringBuilder stringBuilder = new StringBuilder();
@@ -118,7 +140,7 @@ public class UploadServlet extends HttpServlet {
 	            int bytesRead = -1;
 	            while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
 	                stringBuilder.append(charBuffer, 0, bytesRead);
-//	                System.out.println(stringBuilder.toString());
+	                System.out.println(stringBuilder.toString());
 	            }
 	        } else {
 	            stringBuilder.append("");

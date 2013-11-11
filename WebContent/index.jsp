@@ -38,14 +38,17 @@
 	</div>
 	<div><h2>Player</h2></div>
 	<div id='playervciGxnpEWQEL'>
-		<script>
+		<!-- <script>
 		jwplayer('playervciGxnpEWQEL').setup({
-		        file: 'https://www.youtube.com/watch?v=IHQr0HCIN2w',
+		        file: 'http://dkwhu4ttiu7iu.cloudfront.net/23',
 		        width: '50%',
 		        aspectratio: '16:9',
 		        fallback: 'false'
 		    });
-		</script>
+		</script> -->
+		<video controls="" autoplay="" name="media">
+			<source src="http://dkwhu4ttiu7iu.cloudfront.net/23" type="video/mp4">
+		</video>
 	</div>
 	<p>
 	<div id='videolist_div'>

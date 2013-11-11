@@ -11,6 +11,7 @@ public class Helper {
 	public static final String connectionUser = "Yotta";
 	public static final String connectionPassword = "jiatianli";
 	public static final String s3BucketName = "myyoutubebucket.team9";
+	public static final String cloudFrontDomainName = "dkwhu4ttiu7iu.cloudfront.net";
 	public static ArrayList<Movie> getSortedMovieList() {
 		ResultSet rs = DBManager.query("SELECT * FROM Movie");
 		ArrayList<Movie> movies = new ArrayList<Movie>();
