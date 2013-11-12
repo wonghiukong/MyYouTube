@@ -13,6 +13,10 @@ public class Movie implements Comparable<Movie> {
 	private String url;
 	private byte [] data;
 	
+	public String getCloudFrontUrl() {
+		return Helper.cloudFrontDomainName + "/" + movieId;
+	}
+	
 	public long getMovieId() {
 		return movieId;
 	}
