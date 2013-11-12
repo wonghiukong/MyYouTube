@@ -55,15 +55,6 @@
 	</div>
 	<div><h2>Player</h2></div>
 	<div id='playervciGxnpEWQEL'>
-		<script>
-		jwplayer('playervciGxnpEWQEL').setup({
-		        file: 'https://dkwhu4ttiu7iu.cloudfront.net/43',
-		        width: '50%',
-		        provider: 'video',
-		        aspectratio: '16:9',
-		        fallback: 'false'
-		    });
-		</script>
 	</div>
 	<div>
 		<video id='html5_video' width="640" height="480" controls name="media">
@@ -84,7 +75,6 @@
 		</tr>
 		<% ArrayList<Movie> movieList = Helper.getSortedMovieList();
 			for(Movie movie: movieList){
-				out.println(movie.toString());
 		%>
 		<tr>
 		<%

@@ -54,6 +54,41 @@ public class DBManager {
 		return rs;
 	}
 	
+	public static void updateRating(long movieId, int rate)
+	{
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		String sqlUpdate = "UPDATE Movie "
+			    + "SET total_rating = total_rating + ? , rating_count = rating_count + 1 WHERE movie_id=?";
+		try {
+			// new com.mysql.jdbc.Driver();
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			conn = DriverManager.getConnection(Helper.connectionUrl, Helper.connectionUser,
+					Helper.connectionPassword);
+			stmt = (PreparedStatement) conn.prepareStatement(sqlUpdate, Statement.RETURN_GENERATED_KEYS);
+			stmt.setInt(1, rate);
+			stmt.setLong(2, movieId);
+	        
+
+	        stmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public static long insert(Movie movie) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
