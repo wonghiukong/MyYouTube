@@ -111,4 +111,44 @@ public class DBManager {
 		}
 		return id;
 	}
+	
+	public static void delete(long movie_id) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		String SQL_DELETE = "DELETE FROM Movie WHERE movie_id = ?";
+		ResultSet rs = null;
+		try {
+			// new com.mysql.jdbc.Driver();
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			// conn =
+			// DriverManager.getConnection("jdbc:mysql://localhost:3306/testdatabase?user=testuser&password=testpassword");			
+			conn = DriverManager.getConnection(Helper.connectionUrl, Helper.connectionUser,
+					Helper.connectionPassword);
+			stmt = (PreparedStatement) conn.prepareStatement(SQL_DELETE);
+			stmt.setLong(1, movie_id);
+	        // ...
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
