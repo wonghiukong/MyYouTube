@@ -107,8 +107,8 @@ public class UploadServlet extends HttpServlet {
 	    String ext = getExt(title);
 	    if (ext != null)
 	    	title = title.substring(0, title.length() - ext.length() - 1);
-	    System.out.println(title);
-	    System.out.println(ext);
+	    //System.out.println(title);
+	    //System.out.println(ext);
 	    InputStream filecontent = filePart.getInputStream();		
 //		String dataString = convertStreamToString(filecontent);
 //		System.out.println("dataString size: " + dataString.length());
@@ -117,7 +117,7 @@ public class UploadServlet extends HttpServlet {
 		//System.out.println(dataString.length());
 		//Date upload_date = new Date();
 	    String MIMEType = StorageObject.extToMIMETypeHashmap.get(ext);
-	    System.out.println(MIMEType);
+	    //System.out.println(MIMEType);
 		Movie movie = new Movie();
 		movie.setTitle(title);
 		movie.setData(data);
