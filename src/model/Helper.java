@@ -25,7 +25,8 @@ public class Helper {
 				int total_rating = rs.getInt("total_rating");
 				int rating_count = rs.getInt("rating_count");
 				String url = S3sm.getResourceUrl(s3BucketName, String.valueOf(movie_id));
-				Movie movie = new Movie(movie_id, title, ext, upload_date, total_rating, rating_count, url);
+				String mimeType = StorageObject.extToMIMETypeHashmap.get(ext);
+				Movie movie = new Movie(movie_id, title, ext, upload_date, total_rating, rating_count, url, mimeType);
 				movies.add(movie);
 			}
 		} catch (SQLException e) {

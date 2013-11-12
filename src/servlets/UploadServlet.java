@@ -119,6 +119,7 @@ public class UploadServlet extends HttpServlet {
 	    String MIMEType = StorageObject.extToMIMETypeHashmap.get(ext);
 	    System.out.println(MIMEType);
 		Movie movie = new Movie();
+		movie.setExt(ext);
 		movie.setTitle(title);
 		movie.setData(data);
 		movie.setMIMEType(MIMEType);

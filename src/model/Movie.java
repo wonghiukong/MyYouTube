@@ -14,7 +14,7 @@ public class Movie implements Comparable<Movie> {
 	private byte [] data;
 	
 	public String getCloudFrontUrl() {
-		return Helper.cloudFrontDomainName + "/" + movieId;
+		return "https://" + Helper.cloudFrontDomainName + "/" + movieId;
 	}
 	
 	public long getMovieId() {
@@ -33,7 +33,7 @@ public class Movie implements Comparable<Movie> {
 	}
 	
 	public Movie(long movieId, String title, String ext, Date uploadDate,
-			int totalRating, int ratingCount, String url) {
+			int totalRating, int ratingCount, String url, String mimeType) {
 		super();
 		this.movieId = movieId;
 		this.title = title;
@@ -42,6 +42,7 @@ public class Movie implements Comparable<Movie> {
 		this.totalRating = totalRating;
 		this.ratingCount = ratingCount;
 		this.url = url;
+		this.MIMEType = mimeType;
 	}
 	
 	public Movie(long movieId, String title, String ext, Date uploadDate,
@@ -122,7 +123,9 @@ public class Movie implements Comparable<Movie> {
 					+ ", Total_rating: " + totalRating
 					+ ", Rating_count: " + ratingCount
 					+ ", Rating: " + getRating()
-					+ ", url: " + url;
+					+ ", url: " + url
+					+ ", ext: " + ext
+    				+ ", mimeType: " + MIMEType;
     	return info;
     }
 }
