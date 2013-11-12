@@ -9,6 +9,11 @@
 	<title>MyYouTube</title>
 </head>
 	<script type='text/javascript'>
+		function playAll(url, mimeType)
+		{
+			
+			playHTML5Video(url, mimeType);
+		}
 		function playVideo(filename)
 		{
 		    jwplayer('playervciGxnpEWQEL').setup({
@@ -21,10 +26,16 @@
 		}
 		function playHTML5Video(url, mimeType)
 		{
-			var source = document.getElementById('html5_video_source');
+			var source = document.getElementById('video_src');
 			source.setAttribute('src', url);
 			source.setAttribute('type', mimeType);
+			var video = document.getElementById('html5_video');
+			if (!video.paused)
+				video.pause();
+			video.src = url;
+			video.play();
 		}
+		
 	</script>
 <body>
 	
@@ -46,16 +57,17 @@
 	<div id='playervciGxnpEWQEL'>
 		<script>
 		jwplayer('playervciGxnpEWQEL').setup({
-		        file: 'http://dkwhu4ttiu7iu.cloudfront.net/23',
+		        file: 'https://dkwhu4ttiu7iu.cloudfront.net/43',
 		        width: '50%',
+		        provider: 'video',
 		        aspectratio: '16:9',
 		        fallback: 'false'
 		    });
 		</script>
 	</div>
 	<div>
-		<video width="640" height="480" autoplay='true' controls name="media">
-			<source id='html5_video_source' src="" type="video/mp4">
+		<video id='html5_video' width="640" height="480" controls name="media">
+			<source id='video_src' src="https://dkwhu4ttiu7iu.cloudfront.net/43" type="video/mp4">
 		</video>
 	</div>
 	<p>
@@ -79,7 +91,7 @@
 				out.println("<td>"+ movie.getTitle() +"</td>");
 		%>
 			<td>
-				<button name="playButton" value="OK" type="button" onclick="playHTML5Video('<%out.print(movie.getCloudFrontUrl());%>','<%out.print(movie.getMIMEType());%>')">Play</button>
+				<button name="playButton" value="OK" type="button" onclick="playAll('<%out.print(movie.getCloudFrontUrl());%>','<%out.print(movie.getMIMEType());%>')">Play</button>
 			</td>
 		<%
 				out.println("<td>"+ movie.getUploadDate() +"</td>");			
