@@ -6,6 +6,7 @@ public class Movie implements Comparable<Movie> {
 	private long movieId;
 	private String title;
 	private String ext;
+	private String MIMEType;
 	private Date uploadDate;
 	private int totalRating;
 	private int ratingCount;
@@ -17,6 +18,12 @@ public class Movie implements Comparable<Movie> {
 	}
 	public void setMovieId(long movieId) {
 		this.movieId = movieId;
+	}
+	public String getMIMEType() {
+		return MIMEType;
+	}
+	public void setMIMEType(String MIMEType) {
+		this.MIMEType = MIMEType;
 	}
 	public Movie() {
 	}

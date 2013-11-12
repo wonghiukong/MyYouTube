@@ -73,6 +73,9 @@ public class UploadServlet extends HttpServlet {
 		sObj.setBucketName(Helper.s3BucketName);
 		sObj.setData(movie.getData());
 		sObj.setStoragePath(String.valueOf(movie.getMovieId()));
+		sObj.setMimeType(movie.getMIMEType());
+		//System.out.println(movie.getMIMEType());
+		//System.out.println(sObj.getMimeType());
 		S3sm.store(sObj, false, CannedAccessControlList.PublicRead);
 	}
 	
@@ -83,10 +86,29 @@ public class UploadServlet extends HttpServlet {
 		return id;
 	}
 	
+	public void main() {
+		
+	}
+	
+	private String getExt(String title) {
+		String ext = null;
+		String[] tokens = title.split("\\.");
+	    if(tokens.length != 0) {
+	    	ext = tokens[tokens.length - 1];
+	    	ext.toLowerCase();
+	    }
+	    	    
+	    return ext;
+	}
+	
 	private Movie getMovie(HttpServletRequest request) throws IllegalStateException, IOException, ServletException {
 		Part filePart = request.getPart("movie_file"); // Retrieves <input type="file" name="file">
 	    String title = getFilename(filePart);
+	    String ext = getExt(title);
+	    if (ext != null)
+	    	title = title.substring(0, title.length() - ext.length() - 1);
 	    System.out.println(title);
+	    System.out.println(ext);
 	    InputStream filecontent = filePart.getInputStream();		
 //		String dataString = convertStreamToString(filecontent);
 //		System.out.println("dataString size: " + dataString.length());
@@ -94,9 +116,12 @@ public class UploadServlet extends HttpServlet {
 	    byte[] data = convertStreamToByteArray(filecontent);
 		//System.out.println(dataString.length());
 		//Date upload_date = new Date();
+	    String MIMEType = StorageObject.extToMIMETypeHashmap.get(ext);
+	    System.out.println(MIMEType);
 		Movie movie = new Movie();
 		movie.setTitle(title);
 		movie.setData(data);
+		movie.setMIMEType(MIMEType);
 		return movie;
 	}
 	

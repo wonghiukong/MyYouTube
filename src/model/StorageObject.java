@@ -1,5 +1,7 @@
 package model;
 
+import java.util.HashMap;
+
 /**
  * This is a general purpose object used for storing data on S3.
  * The mimeType and data variables need only be set if you are
@@ -12,7 +14,29 @@ public class StorageObject {
 	private byte [] data;
 	private String storagePath;
 	private String mimeType="video/mp4";
-
+	public static HashMap<String, String> extToMIMETypeHashmap;
+	
+//	Video Type	Extension	MIME Type
+//	Flash	 .flv	 video/x-flv
+//	MPEG-4	 .mp4	 video/mp4
+//	iPhone Index	 .m3u8	 application/x-mpegURL
+//	iPhone Segment	 .ts	 video/MP2T
+//	3GP Mobile	 .3gp	 video/3gpp
+//	QuickTime	 .mov	 video/quicktime
+//	A/V Interleave	 .avi	 video/x-msvideo
+//	Windows Media	 .wmv	 video/x-ms-wmv
+	static {
+		extToMIMETypeHashmap = new HashMap<String, String>();
+		extToMIMETypeHashmap.put("flv", "video/x-flv") ;
+		extToMIMETypeHashmap.put("mp4", "video/mp4") ;
+		extToMIMETypeHashmap.put("m3u8", "application/x-mpegURL") ;
+		extToMIMETypeHashmap.put("ts", "video/MP2T") ;
+		extToMIMETypeHashmap.put("3gp", "video/3gpp") ;
+		extToMIMETypeHashmap.put("mov", "video/quicktime") ;
+		extToMIMETypeHashmap.put("avi", "video/x-msvideo") ;
+		extToMIMETypeHashmap.put("wmv", "video/x-ms-wmv") ;
+	}
+	
 	public void setBucketName(String bucketName) {
 		/**
 		 * S3 prefers that the bucket name be lower case.  While you can
