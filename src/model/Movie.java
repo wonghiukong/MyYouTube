@@ -7,7 +7,7 @@ public class Movie implements Comparable<Movie> {
 	private String title;
 	private String ext;
 	private String MIMEType;
-	private Date uploadDate;
+	private String uploadDate;
 	private int totalRating;
 	private int ratingCount;
 	private String url;
@@ -32,7 +32,7 @@ public class Movie implements Comparable<Movie> {
 	public Movie() {
 	}
 	
-	public Movie(long movieId, String title, String ext, Date uploadDate,
+	public Movie(long movieId, String title, String ext, String uploadDate,
 			int totalRating, int ratingCount, String url, String mimeType) {
 		super();
 		this.movieId = movieId;
@@ -45,7 +45,7 @@ public class Movie implements Comparable<Movie> {
 		this.MIMEType = mimeType;
 	}
 	
-	public Movie(long movieId, String title, String ext, Date uploadDate,
+	public Movie(long movieId, String title, String ext, String uploadDate,
 			int totalRating, int ratingCount, String url, byte[] data) {
 		super();
 		this.movieId = movieId;
@@ -75,10 +75,10 @@ public class Movie implements Comparable<Movie> {
 	public void setExt(String ext) {
 		this.ext = ext;
 	}
-	public Date getUploadDate() {
+	public String getUploadDate() {
 		return uploadDate;
 	}
-	public void setUploadDate(Date uploadDate) {
+	public void setUploadDate(String uploadDate) {
 		this.uploadDate = uploadDate;
 	}
 	public int getTotalRating() {

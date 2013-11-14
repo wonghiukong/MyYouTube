@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -62,6 +63,10 @@ public class UploadServlet extends HttpServlet {
 		//int rating_count = Integer.parseInt(request.getParameter("rating_count"));
 		
 		Movie movie = getMovie(request);
+		if (movie.getTitle().equals("")) {
+			response.sendRedirect("uploadError.jsp");
+			return;
+		}
 		movie.setMovieId(insertMovieInfoToDB(movie));
 		putMovieDataIntoS3(movie);
 		response.sendRedirect("index.jsp");
@@ -105,9 +110,9 @@ public class UploadServlet extends HttpServlet {
 		Part filePart = request.getPart("movie_file"); // Retrieves <input type="file" name="file">
 	    String title = getFilename(filePart);
 	    String ext = getExt(title);
-	    if (ext != null)
+	    if (ext != null && !title.equals(""))
 	    	title = title.substring(0, title.length() - ext.length() - 1);
-	    //System.out.println(title);
+	    System.out.println("file title: " + title);
 	    //System.out.println(ext);
 	    InputStream filecontent = filePart.getInputStream();		
 //		String dataString = convertStreamToString(filecontent);
@@ -115,12 +120,14 @@ public class UploadServlet extends HttpServlet {
 //		byte[] data = dataString.getBytes();
 	    byte[] data = convertStreamToByteArray(filecontent);
 		//System.out.println(dataString.length());
-		//Date upload_date = new Date();
+		String uploadDate = (new Date()).toString();
+		System.out.println("upload_date" + uploadDate);
 	    String MIMEType = StorageObject.extToMIMETypeHashmap.get(ext);
 	    //System.out.println(MIMEType);
 		Movie movie = new Movie();
 		movie.setExt(ext);
 		movie.setTitle(title);
+		movie.setUploadDate(uploadDate);
 		movie.setData(data);
 		movie.setMIMEType(MIMEType);
 		return movie;

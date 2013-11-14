@@ -107,7 +107,7 @@ public class DBManager {
 			stmt = (PreparedStatement) conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, movie.getTitle());
 			stmt.setString(2, movie.getExt());
-			stmt.setDate(3, (Date) movie.getUploadDate());
+			stmt.setString(3, movie.getUploadDate());
 			stmt.setInt(4, movie.getTotalRating());
 			stmt.setInt(5, movie.getRatingCount());
 	        // ...

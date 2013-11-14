@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 
 public class Helper {
 	public static final String connectionUrl = "jdbc:mysql://myyoutubedbinstance.cvcefbvtamqy.us-east-1.rds.amazonaws.com:3306/MyYouTubeDB";
@@ -21,7 +20,7 @@ public class Helper {
 				long movie_id = rs.getLong("movie_id");
 				String title = rs.getString("title");
 				String ext = rs.getString("ext");
-				Date upload_date = rs.getDate("upload_date");
+				String upload_date = rs.getString("upload_date");
 				int total_rating = rs.getInt("total_rating");
 				int rating_count = rs.getInt("rating_count");
 				String url = S3sm.getResourceUrl(s3BucketName, String.valueOf(movie_id));
